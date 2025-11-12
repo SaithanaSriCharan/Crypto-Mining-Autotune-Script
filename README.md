@@ -41,13 +41,13 @@ cd Kaspa-Mining-Autotune-Script
 ### 3️⃣ Make the script executable
 
 ```bash
-chmod +x kaspa_autotune_universal.sh
+chmod +x kaspa_autotune.sh
 ```
 
 ### 4️⃣ Run the tuner
 
 ```bash
-./kaspa_autotune_universal.sh
+./kaspa_autotune.sh
 ```
 
 ---
@@ -89,7 +89,7 @@ chmod +x kaspa_autotune_universal.sh
 You can automate this in Hive OS:
 
 1. Go to your rig → **Custom Script** tab
-2. Add path `/home/user/Kaspa-Mining-Autotune-Script/kaspa_autotune_universal.sh`
+2. Add path `/home/user/Kaspa-Mining-Autotune-Script/kaspa_autotune.sh`
 3. Set to run weekly or monthly
 4. It will automatically fine-tune and apply optimal OCs
 
@@ -109,9 +109,8 @@ You can automate this in Hive OS:
 ```
 Kaspa-Mining-Autotune-Script/
 │
-├── kaspa_autotune_universal.sh   # main auto-tuner script
-├── README.md                     # documentation (this file)
-└── LICENSE                       # optional (MIT recommended)
+├── kaspa_autotune.sh             # main auto-tuner script
+└── README.md                     # documentation (this file)
 ```
 
 ---
