@@ -1,8 +1,8 @@
 #!/bin/bash
 # ============================================================
-#  Kaspa Auto-Tune Script (Universal)
+#  Kaspa Auto-Tune Script
 #  Author: SaithanaSriCharan
-#  Version: 1.0
+#  Version: 1.1
 #  Works on: Hive OS / Ubuntu / Debian
 # ============================================================
 
@@ -13,27 +13,22 @@ echo "GPU Model,Core Clock (MHz),Power Limit (W),Hashrate (MH/s),Power Draw (W),
 echo "Kaspa Auto-Tune started at $(date)"
 echo "------------------------------------------------------------"
 
-# --- Step 1: Detect all GPUs
 GPUS=$(nvidia-smi --query-gpu=index,name --format=csv,noheader)
 
-# --- Step 2: Function to run miner benchmark
 benchmark_gpu() {
     GPU_INDEX=$1
     GPU_NAME=$2
     CORE_CLOCK=$3
     POWER_LIMIT=$4
 
-    # Apply OC
     nvidia-smi -i $GPU_INDEX -pl $POWER_LIMIT
     nvidia-settings -a "[gpu:${GPU_INDEX}]/GPUGraphicsClockOffset[3]=${CORE_CLOCK}" >/dev/null 2>&1
 
     echo "⏱️  Benchmarking GPU $GPU_INDEX ($GPU_NAME) @ Core ${CORE_CLOCK}, PL ${POWER_LIMIT}"
 
-    # Run lolMiner benchmark for short duration
     HASHRATE=$(timeout 45s lolMiner --benchmark KASPA 2>/dev/null | grep -i "kH/s" | tail -n 1 | awk '{print $5}')
     POWER_DRAW=$(nvidia-smi -i $GPU_INDEX --query-gpu=power.draw --format=csv,noheader,nounits | awk '{print int($1)}')
 
-    # Convert kH/s → MH/s if needed
     HASHRATE=$(echo "scale=2; $HASHRATE/1000" | bc)
     EFFICIENCY=$(echo "scale=2; $HASHRATE / $POWER_DRAW" | bc)
 
@@ -41,17 +36,13 @@ benchmark_gpu() {
     echo "✅ $GPU_NAME → $HASHRATE MH/s @ ${POWER_DRAW}W = ${EFFICIENCY} MH/W"
 }
 
-# --- Step 3: Define tuning profiles
 declare -A CORE_RANGES
 declare -A POWER_RANGES
-
 CORE_RANGES["3060 Ti"]="1200 1300 1400 1500 1600"
 POWER_RANGES["3060 Ti"]="90 100 110 120"
-
 CORE_RANGES["2080"]="1400 1500 1600 1700"
 POWER_RANGES["2080"]="100 110 120 130"
 
-# --- Step 4: Iterate GPUs
 while IFS=',' read -r GPU_INDEX GPU_NAME; do
     echo "🔍 Tuning GPU $GPU_INDEX: $GPU_NAME"
     MODEL_KEY="unknown"
@@ -69,7 +60,6 @@ while IFS=',' read -r GPU_INDEX GPU_NAME; do
     done
 done <<< "$GPUS"
 
-# --- Step 5: Pick best combos
 echo "" > "$BEST_FILE"
 echo "🏆 Best Settings (Kaspa)" >> "$BEST_FILE"
 echo "========================" >> "$BEST_FILE"
@@ -92,7 +82,6 @@ echo "   → $LOG_FILE"
 echo "   → $BEST_FILE"
 echo "------------------------------------------------------------"
 
-# --- Step 6: Apply best OC
 while IFS=',' read -r GPU_MODEL CORE_CLOCK POWER_LIMIT HASHRATE POWER_DRAW EFF; do
     for GPU_INDEX in $(nvidia-smi --query-gpu=index --format=csv,noheader); do
         GPU_NAME=$(nvidia-smi -i $GPU_INDEX --query-gpu=name --format=csv,noheader)
