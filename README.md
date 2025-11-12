@@ -1,129 +1,109 @@
 
+# ⚡ Crypto Mining Auto-Tune Scripts
 
-# 🧠 Kaspa Mining Auto-Tune Script (Hive OS)
+### Efficient GPU Overclock & Performance Tuning for Kaspa, Nexa, Radiant, and IronFish
 
-A fully automated fine-tuning script for **Kaspa (kHeavyHash)** that optimizes NVIDIA RTX GPUs on Hive OS or Linux mining rigs.
-It benchmarks multiple overclock combinations, measures efficiency (MH/W), and applies the best-performing settings automatically.
-
----
-
-## 🚀 Features
-
-✅ **Auto GPU Detection** – works with mixed rigs
-
-✅ **Model-Specific OC Ranges** – safe and efficient tuning
-
-✅ **Automatic Efficiency Optimization** – finds the best MH/W
-
-✅ **CSV Logging** – full performance data
-
-✅ **Applies Best Settings** – automatically after testing
-
-✅ **Works for RTX 20xx, 30xx, and 40xx** cards
+Developed by **[SaithanaSriCharan](https://github.com/SaithanaSriCharan)**
+Compatible with **Hive OS / Ubuntu / Debian / Windows (via WSL)**
 
 ---
 
-## ⚙️ Installation
+## 🧠 Overview
 
-### 1️⃣ SSH into your rig
+This repository provides **auto-tuning bash scripts** that help miners automatically find the most efficient overclock (OC) settings for each GPU and coin.
+Each script benchmarks a range of core/memory/power settings, logs performance, and helps you determine the best MH/W ratio for stable and profitable mining.
 
-```bash
-ssh user@<rig-ip>
+---
+
+## 📁 Repository Structure
+
+```
+Crypto-Mining-Autotune-Script/
+│
+├── README.md
+├── kaspa_autotune.sh
+├── nexa_autotune.sh
+├── radiant_autotune.sh
+└── ironfish_autotune.sh
 ```
 
-### 2️⃣ Clone this repository
+---
+
+## ⚙️ Available Auto-Tune Scripts
+
+| Coin         | Algorithm   | Script                 | Recommended Miner | Status  |
+| ------------ | ----------- | ---------------------- | ----------------- | ------- |
+| **Kaspa**    | kHeavyHash  | `kaspa_autotune.sh`    | lolMiner          | ✅ Ready |
+| **Nexa**     | NexaPow     | `nexa_autotune.sh`     | BZMiner           | ✅ Ready |
+| **Radiant**  | Sha512/256d | `radiant_autotune.sh`  | SRBMiner          | ✅ Ready |
+| **IronFish** | Blake3      | `ironfish_autotune.sh` | lolMiner          | ✅ Ready |
+
+---
+
+## 🔧 How to Use
+
+1️⃣ **Clone the repo**
 
 ```bash
-git clone https://github.com/SaithanaSriCharan/Kaspa-Mining-Autotune-Script.git
-cd Kaspa-Mining-Autotune-Script
+git clone https://github.com/SaithanaSriCharan/Crypto-Mining-Autotune-Script.git
+cd Crypto-Mining-Autotune-Script
 ```
 
-### 3️⃣ Make the script executable
+2️⃣ **Make the scripts executable**
 
 ```bash
-chmod +x kaspa_autotune.sh
+chmod +x *.sh
 ```
 
-### 4️⃣ Run the tuner
+3️⃣ **Run a tuning script**
 
 ```bash
 ./kaspa_autotune.sh
 ```
 
----
+4️⃣ **View tuning results**
+After running, you’ll see a `results.csv` or console summary with:
 
-## 📊 Output Files
-
-| File                         | Description                                        |
-| ---------------------------- | -------------------------------------------------- |
-| `kaspa_autotune_results.csv` | All test results (core, PL, hashrate, power, MH/W) |
-| `kaspa_best.txt`             | Best OC combo per GPU model                        |
-| Console Output               | Live tuning progress & status                      |
+* Hashrate (MH/s)
+* Power Draw (W)
+* Efficiency (MH/W)
+* Best OC Settings found
 
 ---
 
-## 🧩 Supported GPUs
-
-| Generation | Supported Models                |
-| ---------- | ------------------------------- |
-| RTX 20xx   | 2060, 2070, 2080, 2080 Ti       |
-| RTX 30xx   | 3060, 3060 Ti, 3070, 3080, 3090 |
-| RTX 40xx   | 4060, 4070, 4080, 4090          |
-
----
-
-## 🧠 How It Works
-
-1. Detects all GPUs via `nvidia-smi`
-2. Assigns safe core and power ranges based on model
-3. Tests multiple combinations
-4. Monitors hashrate & power usage
-5. Calculates MH/W efficiency
-6. Logs results
-7. Picks and applies the most efficient OC settings
-
----
-
-## ⚡ Hive OS Integration (Optional)
-
-You can automate this in Hive OS:
-
-1. Go to your rig → **Custom Script** tab
-2. Add path `/home/user/Kaspa-Mining-Autotune-Script/kaspa_autotune.sh`
-3. Set to run weekly or monthly
-4. It will automatically fine-tune and apply optimal OCs
-
----
-
-## 🪙 Example Output
+## 📊 Example Output
 
 ```
-🏆 Best 3060 Ti → Core 1560, PL 70W, 480 MH/s, 100W, 4.8 MH/W
-🏆 Best 2080    → Core 1660, PL 105W, 460 MH/s, 130W, 3.5 MH/W
+GPU, CORE, MEM, POWER, HASHRATE(MH/s), POWER(W), EFFICIENCY(MH/W)
+GPU0, 1100, 810, 120, 38.5, 118, 0.33
+GPU0, 1150, 800, 125, 39.0, 121, 0.32
+Best Settings → CORE=1100, MEM=810, POWER=120
 ```
 
 ---
 
-## 🧩 Repository Structure
+## 🧩 Coming Soon
 
-```
-Kaspa-Mining-Autotune-Script/
-│
-├── kaspa_autotune.sh             # main auto-tuner script
-└── README.md                     # documentation (this file)
-```
+| Feature                    | Description                                        |
+| -------------------------- | -------------------------------------------------- |
+| **auto_decision_agent.py** | AI-based agent to auto-select most profitable coin |
+| **gpu_monitor.sh**         | Real-time GPU health and temperature tracker       |
+| **profit_calculator.sh**   | Estimate daily net profit with electricity cost    |
+| **telegram_alerts.sh**     | Send profit updates and switch alerts to Telegram  |
 
 ---
 
-## 🧰 Contributing
+## 👨‍💻 Author
 
-1. Fork this repository
-2. Create your feature branch:
+**Saithana Sri Charan**
+💡 Open-source enthusiast | Crypto mining automation | AI integrations
+🔗 [GitHub Profile](https://github.com/SaithanaSriCharan)
 
-   ```bash
-   git checkout -b feature/new-tune
-   ```
-3. Commit your changes
-4. Push to your fork
-5. Submit a pull request 🎯
+---
+
+## ☕ Support My Work
+
+If you like my work and want to support future development —
+
+<a href="https://www.buymeacoffee.com/404CyberBoy" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
